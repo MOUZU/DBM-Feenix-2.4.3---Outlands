@@ -1,7 +1,7 @@
 local Maulgar = DBM:NewBossMod("Maulgar", DBM_MAULGAR_NAME, DBM_MAULGAR_DESCRIPTION, DBM_GRUULS_LAIR, DBMGUI_TAB_OTHER_BC, 1);
 
-Maulgar.Version			= "1.0";
-Maulgar.Author			= "Tandanu";
+Maulgar.Version			= "1.1";
+Maulgar.Author			= "LYQ";
 Maulgar.LastSpellShield = 0;
 
 Maulgar:RegisterCombat("COMBAT");
@@ -31,8 +31,9 @@ Maulgar:AddBarOption("Arcing Smash")
 Maulgar:AddBarOption("Spell Shield: (.*)")
 
 function Maulgar:OnCombatStart(delay)
-	self:StartStatusBarTimer(58 - delay, "Next Whirlwind", "Interface\\Icons\\Ability_Whirlwind");
-	self:ScheduleSelf(54 - delay, "WhirlwindWarning");
+	self:StartStatusBarTimer(29 - delay, "Next Whirlwind", "Interface\\Icons\\Ability_Whirlwind");
+	self:ScheduleSelf(24 - delay, "WhirlwindWarning");
+    self:StartStatusBarTimer(10 - delay, "Felhunter", "Interface\\Icons\\Spell_Shadow_SummonFelHunter");
 end
 
 function Maulgar:OnEvent(event, arg1)
@@ -71,6 +72,9 @@ function Maulgar:OnEvent(event, arg1)
 				self:Announce(DBM_MAULGAR_WARN_HEAL, 2);
 			end
 			self:StartStatusBarTimer(2, "Heal", "Interface\\Icons\\Spell_Holy_Heal");
+        elseif arg1.spellId == 33131 then
+            -- LYQ: try this cus spellcastsuccess doesn't seem to trigger, if this works the timer might be off
+            self:SendSync("Felhunter");
 		end
 	elseif event == "SPELL_CAST_SUCCESS" then
 		if arg1.spellId == 33131 then
@@ -92,14 +96,14 @@ function Maulgar:OnSync(msg)
 		if self.Options.WarnWW then
 			self:Announce(DBM_MAULGAR_WARN_WHIRLWIND, 3);
 		end
-		self:StartStatusBarTimer(55, "Next Whirlwind", "Interface\\Icons\\Ability_Whirlwind");
+		self:StartStatusBarTimer(34, "Next Whirlwind", "Interface\\Icons\\Ability_Whirlwind");
 		self:StartStatusBarTimer(15.2, "Whirlwind", "Interface\\Icons\\Ability_Whirlwind");
-		self:ScheduleSelf(51, "WhirlwindWarning");
+		self:ScheduleSelf(29, "WhirlwindWarning");
 	elseif msg == "Felhunter" then
 		if self.Options.WarnFelhunter then
 			self:Announce(DBM_MAULGAR_WARN_FELHUNTER, 2);
 		end
-		self:StartStatusBarTimer(48.5, "Felhunter", "Interface\\Icons\\Spell_Shadow_SummonFelHunter");
+		self:StartStatusBarTimer(37, "Felhunter", "Interface\\Icons\\Spell_Shadow_SummonFelHunter");
 	elseif string.sub(msg, 1, 6) == "Arcing" then
 		if self.Options.WarnSmash then
 			local _, _, target, damage = string.find(msg, "Arcing ([^%s]+) (%w+)");			

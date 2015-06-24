@@ -36,7 +36,7 @@ DBM_GRUUL_SILENCE_OPT		= "Announce Silence";
 DBM_GRUUL_CAVE_OPTION		= "Show special warning for Cave In";
 DBM_GRUUL_OPTION_GROWBAR	= "Grow"
 
-DBM_GRUUL_SAY_PULL			= "Come.... and die."
+DBM_GRUUL_SAY_PULL			= " Come... and die.";
 DBM_GRUUL_GROW_EMOTE		= "%s grows in size!";
 DBM_GRUUL_EMOTE_SHATTER		= "%s roars!";
 DBM_GRUUL_SILENCE			= "Reverberation";
